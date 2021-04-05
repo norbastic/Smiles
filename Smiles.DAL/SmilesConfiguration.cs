@@ -23,6 +23,9 @@ namespace Smiles.DAL
                 .IsRequired();
 
             builder
+                .HasData(new SmilesEntity() { Id = 1, Data = "Some data" });
+
+            builder
                 .ToTable("SmilesEntities");
         }
     }

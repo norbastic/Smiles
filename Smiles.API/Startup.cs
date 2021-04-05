@@ -6,7 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Smiles.BL;
 using Smiles.Core;
+using Smiles.Core.Services;
 using Smiles.DAL;
 using System;
 using System.Collections.Generic;
@@ -28,6 +30,7 @@ namespace Smiles.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<ISmilesService, SmilesService>();
             services.AddDbContext<SmilesDbContext>(options => 
                 options.UseNpgsql(
                     Configuration.GetConnectionString("Default"), x => x.MigrationsAssembly("Smiles.DAL")

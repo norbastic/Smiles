@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Smiles.BL\Smiles.BL.csproj" />
     <ProjectReference Include="..\Smiles.Core\Smiles.Core.csproj" />
     <ProjectReference Include="..\Smiles.DAL\Smiles.DAL.csproj" />
   </ItemGroup>
