@@ -57,7 +57,7 @@ namespace Smiles.API.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<ActionResult> CreateSmiles(SmilesEntity smiles)
+        public virtual async Task<ActionResult> CreateSmiles([FromBody] SmilesEntity smiles)
         {
             var result = await _smilesService.CreateSmilesEntity(smiles);
 

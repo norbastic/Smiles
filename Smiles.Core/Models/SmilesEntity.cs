@@ -8,5 +8,6 @@ namespace Smiles.Core.Models
     {
         public int Id { get; set; }
         public string Data { get; set; }
+        public string ImageFormat { get; set; }
     }
 }

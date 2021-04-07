@@ -15,17 +15,45 @@ namespace Smiles.API.Controllers.v2
     [ApiController]
     public class SmilesController : BaseSmilesController
     {
+        private readonly ISmilesService _smilesService;
+
         public SmilesController(ILogger<SmilesController> logger, ISmilesService smilesService): base(logger, smilesService)
         {
+            _smilesService = smilesService;
         }
 
-        [HttpPost]
-        public async override Task<ActionResult> CreateSmiles([FromBody] string smiles)
+        [NonAction]
+        public override Task<ActionResult> CreateSmiles([FromBody] SmilesEntity smiles)
         {
-            // Do nothing just log;
-            Console.WriteLine($"Smiles data: {smiles.Data}");
+            return base.CreateSmiles(smiles);
+        }
 
-            return Ok();
+        /// <summary>
+        /// Honestly I would just simply add this extra parameter to the model
+        /// </summary>
+        /// <param name="imageFormat"></param>
+        /// <param name="smiles"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> CreateSmiles([FromQuery] string imageFormat, [FromBody] SmilesEntity smiles)
+        {
+            if ((imageFormat == null) || 
+                (imageFormat.ToLower() != AllowedFormats.PNG && 
+                imageFormat.ToLower() != AllowedFormats.SVG))
+            {
+                return BadRequest();
+            }
+
+            smiles.ImageFormat = imageFormat;
+
+            var result = await _smilesService.CreateSmilesEntity(smiles);
+
+            if (result != null)
+            {
+                return Ok();
+            }
+
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
 
     }
