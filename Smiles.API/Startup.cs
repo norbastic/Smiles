@@ -36,16 +36,26 @@ namespace Smiles.API
                     Configuration.GetConnectionString("Default"), x => x.MigrationsAssembly("Smiles.DAL")
                 )
             );
+            services.AddApiVersioning(
+                versionConfig =>
+                {
+                    versionConfig.DefaultApiVersion = new ApiVersion(1, 0);
+                    versionConfig.AssumeDefaultVersionWhenUnspecified = true;
+                    versionConfig.ReportApiVersions = true;
+                }
+            );
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, SmilesDbContext db)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            db.Database.Migrate();
 
             app.UseRouting();
 

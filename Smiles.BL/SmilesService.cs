@@ -24,9 +24,9 @@ namespace Smiles.BL
             return smiles;
         }
 
-        public async Task DeleteSmilesEntity(SmilesEntity smiles)
+        public async Task DeleteSmilesEntity(int id)
         {
-            _unitOfWork.SmilesEnities.Remove(smiles);
+            _unitOfWork.SmilesEnities.Remove(id);
             await _unitOfWork.CommitAsync();
         }
 

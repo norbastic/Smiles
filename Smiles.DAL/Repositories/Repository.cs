@@ -43,9 +43,11 @@ namespace Smiles.DAL.Repositories
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public void Remove(T entity)
+        public void Remove(int id)
         {
-            _dbContext.Set<T>().Remove(entity);
+            var item = _dbContext.Set<T>().Find(id);
+            
+            _dbContext.Set<T>().Remove(item);
         }
     }
 }

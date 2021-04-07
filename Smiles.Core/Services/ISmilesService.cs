@@ -12,6 +12,6 @@ namespace Smiles.Core.Services
         Task<SmilesEntity> GetSmilesEntityById(int id);
         Task<SmilesEntity> CreateSmilesEntity(SmilesEntity smiles);
         Task UpdateSmilesEntity(SmilesEntity smilesToUpdate, SmilesEntity smiles);
-        Task DeleteSmilesEntity(SmilesEntity smiles); 
+        Task DeleteSmilesEntity(int id); 
     }
 }

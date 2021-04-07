@@ -13,6 +13,6 @@ namespace Smiles.Core.Repositories
         IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> predicate);
         Task<TEntity> FindOneAsync(Expression<Func<TEntity, bool>> predicate);
         Task AddAsync(TEntity entity);
-        void Remove(TEntity entity);
+        void Remove(int id);
     }
 }
