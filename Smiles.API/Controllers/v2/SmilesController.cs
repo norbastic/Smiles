@@ -35,7 +35,7 @@ namespace Smiles.API.Controllers.v2
         /// <param name="smiles"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> CreateSmiles([FromQuery] string imageFormat, [FromBody] SmilesEntity smiles)
+        public async Task<ActionResult> CreateSmiles([FromBody] SmilesEntity smiles, [FromQuery] string imageFormat = null)
         {
             if ((imageFormat == null) || 
                 (imageFormat.ToLower() != AllowedFormats.PNG && 
