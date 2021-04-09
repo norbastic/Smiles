@@ -22,8 +22,7 @@ import { MatDialogModule } from "@angular/material/dialog";
     HttpClientModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule,
-    MatDialogModule
+    MatIconModule
   ],
   providers: [Constants],
   bootstrap: [AppComponent]

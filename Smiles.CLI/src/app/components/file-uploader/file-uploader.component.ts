@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UploadService } from "../../services/upload.service";
-import { map, takeUntil } from "rxjs/operators";
-import { Subject } from "rxjs";
+import { catchError, map, takeUntil } from "rxjs/operators";
+import { of, Subject } from "rxjs";
 
 @Component({
   selector: 'app-file-uploader',
@@ -11,6 +11,7 @@ import { Subject } from "rxjs";
 export class FileUploaderComponent implements OnInit, OnDestroy {
   public selectedFile: File;
   public uploadIsDisabled = true;
+  public buttonText = "Upload";
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -42,9 +43,16 @@ export class FileUploaderComponent implements OnInit, OnDestroy {
           map(count => {
             if (count > 0) {
               alert(`${count} SMILES entity is uploaded to the DB`);
+              this.buttonText = "Upload";
             } else {
               alert(`Could not upload to the db`);
+              this.buttonText = "Try again"
             }
+          }),
+          catchError(err => {
+            alert("Error occured during contacting server");
+            this.buttonText = "Try again"
+            return of(err);
           })
       ).subscribe();
     }
