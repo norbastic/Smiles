@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<mat-card>
+    <mat-card-title>Uploader</mat-card-title>
+    <mat-card-content>
+        <input type="file" class="input-file" (change)="onFileSelected($event)" #uploader>
+        <div class="uploader">
+            <p>{{selectedFile?.name || 'No file has been selected yet.'}}</p>
+            <button mat-raised-button color="primary" (click)="uploader.click()">Browse
+                    <mat-icon *ngIf="!selectedFile">source</mat-icon>
+                    <mat-icon *ngIf="selectedFile">check</mat-icon>
+           </button>
+        </div>
+
+        <button mat-raised-button color="accent" (click)="onUploadClick()" [disabled]="uploadIsDisabled">Upload</button>
+    </mat-card-content>
+
+</mat-card>

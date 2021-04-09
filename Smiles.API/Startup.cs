@@ -73,11 +73,29 @@ namespace Smiles.API
                 );
             }
 
-            db.Database.Migrate();
+            try
+            {
+                db.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                // Probably DB engine is not running
+                Console.WriteLine($"Database engine is not ready: {ex.Message}");
+                Environment.Exit(-1);
+            }
+            
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // Not a good idea in a production environment
+            app.UseCors(config =>
+            {
+                config.AllowAnyOrigin();
+                config.AllowAnyMethod();
+                config.AllowAnyHeader();
+            });
 
             app.UseEndpoints(endpoints =>
             {

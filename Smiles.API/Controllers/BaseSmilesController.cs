@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
 using Smiles.Core.Models;
 using Smiles.Core.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Smiles.API.Controllers
@@ -15,6 +18,12 @@ namespace Smiles.API.Controllers
     {
         private readonly ILogger<BaseSmilesController> _logger;
         private readonly ISmilesService _smilesService;
+
+        private async Task<string> ReadStreamAsync(IFormFile file)
+        {
+            using var reader = new StreamReader(file.OpenReadStream());
+            return await reader.ReadToEndAsync();
+        }
 
         public BaseSmilesController(ILogger<BaseSmilesController> logger, ISmilesService smilesService)
         {
@@ -55,6 +64,37 @@ namespace Smiles.API.Controllers
 
             return Ok();
         }
+
+        [HttpPost]
+        [Route("upload")]
+        public virtual async Task<ActionResult<int>> UploadSmiles()
+        {
+            try
+            {
+                var form = await Request.ReadFormAsync();
+                var file = form.Files.FirstOrDefault();
+
+                if (file != null && file.Length > 0)
+                {
+                    var result = await ReadStreamAsync(file);
+                    var smiles = result.Split(Environment.NewLine);
+
+                    foreach (var item in smiles)
+                    {
+                        await _smilesService.CreateSmilesEntity(new SmilesEntity() { Data = item });
+                    }
+
+                    return Ok(smiles.Count());
+                }
+
+                return BadRequest(-1);
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);                
+            }
+        }
+
 
         [HttpPost]
         public virtual async Task<ActionResult> CreateSmiles([FromBody] SmilesEntity smiles)
